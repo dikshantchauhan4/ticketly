@@ -18,6 +18,8 @@ export function TicketControls({
     reason: ""
   });
   const [assigneeId, setAssigneeId] = useState(ticket.assigneeId);
+  const [statusChange, setStatusChange] = useState(null);
+  const [transferChange, setTransferChange] = useState(null);
   const transferTeams = teams.filter((team) => team.departmentId === transfer.departmentId);
   const teamMembers = employees.filter(
     (employee) =>
@@ -37,18 +39,43 @@ export function TicketControls({
       reason: ""
     });
     setAssigneeId(ticket.assigneeId);
+    setStatusChange(null);
+    setTransferChange(null);
   }, [ticket.id, ticket.departmentId, ticket.teamId, ticket.assigneeId]);
+
+  function requestStatusChange(status) {
+    if (status === ticket.status) {
+      return;
+    }
+    setStatusChange(status);
+  }
 
   function submitTransfer(event) {
     event.preventDefault();
     if (!transfer.departmentId || transfer.departmentId === ticket.departmentId) {
       return;
     }
-    onTransfer({
+    setTransferChange({
       toDepartmentId: transfer.departmentId,
       toTeamId: transfer.teamId || transferTeams[0]?.id || "",
       reason: transfer.reason
     });
+  }
+
+  function confirmStatusChange() {
+    if (!statusChange) {
+      return;
+    }
+    onStatus(statusChange);
+    setStatusChange(null);
+  }
+
+  function confirmTransferChange() {
+    if (!transferChange) {
+      return;
+    }
+    onTransfer(transferChange);
+    setTransferChange(null);
   }
 
   function submitAssign(event) {
@@ -74,7 +101,7 @@ export function TicketControls({
         <select
           className="input"
           value={ticket.status}
-          onChange={(event) => onStatus(event.target.value)}
+          onChange={(event) => requestStatusChange(event.target.value)}
         >
           {Object.entries(statusLabels).map(([value, label]) => (
             <option key={value} value={value}>
@@ -156,6 +183,68 @@ export function TicketControls({
           Transfer ticket
         </button>
       </form>
+      <ConfirmDialog
+        actionLabel="Change status"
+        body={`This will change the ticket status from ${statusLabels[ticket.status]} to ${
+          statusLabels[statusChange] ?? "the selected status"
+        }.`}
+        open={Boolean(statusChange)}
+        title="Confirm status change"
+        onCancel={() => setStatusChange(null)}
+        onConfirm={confirmStatusChange}
+      />
+      <ConfirmDialog
+        actionLabel="Transfer ticket"
+        body={`This will move the ticket to ${getDepartmentName(
+          departments,
+          transferChange?.toDepartmentId
+        )} / ${getTeamName(teams, transferChange?.toTeamId)}.`}
+        open={Boolean(transferChange)}
+        title="Confirm ticket transfer"
+        onCancel={() => setTransferChange(null)}
+        onConfirm={confirmTransferChange}
+      />
     </div>
   );
+}
+
+function ConfirmDialog({ actionLabel, body, onCancel, onConfirm, open, title }) {
+  if (!open) {
+    return null;
+  }
+
+  return (
+    <div
+      className="fixed inset-0 z-50 grid place-items-center bg-black/55 px-4 py-6"
+      role="presentation"
+    >
+      <div
+        aria-modal="true"
+        className="panel w-full max-w-md p-4 shadow-soft"
+        role="dialog"
+      >
+        <h4 className="text-base font-bold">{title}</h4>
+        <p className="mt-2 text-sm leading-5 text-muted">{body}</p>
+        <div className="mt-4 flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
+          <button className="btn btn-secondary" type="button" onClick={onCancel}>
+            Cancel
+          </button>
+          <button className="btn btn-primary" type="button" onClick={onConfirm}>
+            {actionLabel}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function getDepartmentName(departments, departmentId) {
+  return departments.find((department) => department.id === departmentId)?.name ?? "Unknown";
+}
+
+function getTeamName(teams, teamId) {
+  if (!teamId) {
+    return "Auto route team";
+  }
+  return teams.find((team) => team.id === teamId)?.name ?? "Auto route team";
 }

@@ -13,7 +13,7 @@ export function SettingsPage({ currentUser, onThemeChange, theme }) {
             onClick={() => onThemeChange("theme-light")}
           >
             <Sun className="h-4 w-4" />
-            Yellow light
+            Light
           </button>
           <button
             className={`btn justify-start ${theme === "theme-dark" ? "btn-primary" : "btn-secondary"}`}
@@ -21,7 +21,7 @@ export function SettingsPage({ currentUser, onThemeChange, theme }) {
             onClick={() => onThemeChange("theme-dark")}
           >
             <Moon className="h-4 w-4" />
-            Yellow dark
+            Dark
           </button>
         </div>
       </section>

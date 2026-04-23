@@ -68,16 +68,17 @@ textarea {
 }
 
 .theme-dark {
-  --bg: 18 18 15;
-  --surface: 36 34 28;
-  --elevated: 58 52 36;
-  --ink: 255 252 241;
-  --muted: 232 219 178;
-  --line: 129 111 58;
-  --brand: 251 191 36;
-  --brand-ink: 32 28 10;
-  --accent: 45 212 191;
+  --bg: 18 21 23;
+  --surface: 28 32 35;
+  --elevated: 38 43 47;
+  --ink: 241 245 249;
+  --muted: 176 185 195;
+  --line: 72 82 91;
+  --brand: 94 234 212;
+  --brand-ink: 6 47 43;
+  --accent: 251 191 36;
   --danger: 251 113 133;
+  color-scheme: dark;
 }
 
 .theme-contrast {
@@ -107,14 +108,26 @@ textarea {
     border-radius: 8px;
   }
 
+  .theme-dark .panel {
+    box-shadow: 0 18px 50px rgb(0 0 0 / 0.24);
+  }
+
   .subtle-panel {
     @apply border border-line/70 bg-elevated text-ink;
     border-radius: 8px;
   }
 
+  .theme-dark .subtle-panel {
+    @apply border-line/60 bg-elevated/70;
+  }
+
   .input {
     @apply w-full border border-line bg-surface px-3 py-2 text-sm text-ink outline-none transition focus:border-brand focus:ring-2 focus:ring-brand/25;
     border-radius: 6px;
+  }
+
+  .theme-dark .input {
+    @apply border-line/75 bg-surface/70 placeholder:text-muted/70;
   }
 
   .label {
@@ -134,6 +147,10 @@ textarea {
     @apply border-line bg-surface text-ink hover:bg-elevated;
   }
 
+  .theme-dark .btn-secondary {
+    @apply border-line/70 bg-elevated/45 hover:bg-elevated/80;
+  }
+
   .btn-danger {
     @apply bg-danger text-white hover:opacity-90;
   }
@@ -146,5 +163,61 @@ textarea {
   .status-pill {
     @apply inline-flex items-center whitespace-nowrap border px-2 py-1 text-xs font-semibold;
     border-radius: 999px;
+  }
+
+  .status-open {
+    @apply border-sky-400/40 bg-sky-100 text-sky-800;
+  }
+
+  .status-pending {
+    @apply border-amber-400/40 bg-amber-100 text-amber-900;
+  }
+
+  .status-in-progress {
+    @apply border-indigo-400/40 bg-indigo-100 text-indigo-800;
+  }
+
+  .status-waiting {
+    @apply border-fuchsia-400/40 bg-fuchsia-100 text-fuchsia-800;
+  }
+
+  .status-transferred {
+    @apply border-orange-400/40 bg-orange-100 text-orange-900;
+  }
+
+  .status-resolved {
+    @apply border-emerald-400/40 bg-emerald-100 text-emerald-800;
+  }
+
+  .status-closed {
+    @apply border-zinc-400/40 bg-zinc-100 text-zinc-800;
+  }
+
+  .theme-dark .status-open {
+    @apply border-sky-300/30 bg-sky-300/10 text-sky-200;
+  }
+
+  .theme-dark .status-pending {
+    @apply border-amber-300/30 bg-amber-300/10 text-amber-200;
+  }
+
+  .theme-dark .status-in-progress {
+    @apply border-indigo-300/30 bg-indigo-300/10 text-indigo-200;
+  }
+
+  .theme-dark .status-waiting {
+    @apply border-fuchsia-300/30 bg-fuchsia-300/10 text-fuchsia-200;
+  }
+
+  .theme-dark .status-transferred {
+    @apply border-orange-300/30 bg-orange-300/10 text-orange-200;
+  }
+
+  .theme-dark .status-resolved {
+    @apply border-emerald-300/30 bg-emerald-300/10 text-emerald-200;
+  }
+
+  .theme-dark .status-closed {
+    @apply border-zinc-300/30 bg-zinc-300/10 text-zinc-200;
   }
 }
